@@ -49,6 +49,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import android.util.Log;
+
 
 public class VideoPlayerPlugin implements MethodCallHandler {
 
@@ -96,6 +98,7 @@ public class VideoPlayerPlugin implements MethodCallHandler {
         Cache cache = new SimpleCache(new File(getExternalCacheDir(), "media_cache"), cacheEvictor);
 
         dataSourceFactory = new CacheDataSourceFactory(cache, upstreamFactory, CacheDataSource.FLAG_BLOCK_ON_CACHE, 100 * 1024 * 1024);
+        Log.e("VideoPlayerPlugin","use cache");
       }
 
       MediaSource mediaSource = buildMediaSource(uri, dataSourceFactory, context);
