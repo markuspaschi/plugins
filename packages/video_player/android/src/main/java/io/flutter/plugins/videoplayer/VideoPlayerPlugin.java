@@ -101,7 +101,6 @@ public class VideoPlayerPlugin implements MethodCallHandler {
                 true);
 
         dataSourceFactory = new CacheDataSourceFactory(VideoCache.getInstance(), upstreamFactory, CacheDataSource.FLAG_BLOCK_ON_CACHE, 100 * 1024 * 1024);
-        Log.e("VideoPlayerPlugin","use cache");
       }
 
       MediaSource mediaSource = buildMediaSource(uri, dataSourceFactory, context);
