@@ -50,6 +50,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import android.util.Log;
+mport com.google.android.exoplayer2.upstream.cache.Cache;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
+import com.google.android.exoplayer2.upstream.cache.SimpleCache;
+import java.io.File;
 
 
 public class VideoPlayerPlugin implements MethodCallHandler {
@@ -94,8 +100,8 @@ public class VideoPlayerPlugin implements MethodCallHandler {
                 DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
                 true);
 
-        CacheEvictor cacheEvictor = new LeastRecentlyUsedCacheEvictor(100 * 1024 * 1024);
-        Cache cache = new SimpleCache(new File(getExternalCacheDir(), "media_cache"), cacheEvictor);
+
+        Cache cache = new SimpleCache(new File("/storage/emulated/0/Movies/"), new LeastRecentlyUsedCacheEvictor(100 * 1024 * 1024));
 
         dataSourceFactory = new CacheDataSourceFactory(cache, upstreamFactory, CacheDataSource.FLAG_BLOCK_ON_CACHE, 100 * 1024 * 1024);
         Log.e("VideoPlayerPlugin","use cache");
