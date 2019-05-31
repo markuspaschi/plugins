@@ -57,6 +57,14 @@ import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvicto
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import java.io.File;
 
+public class VideoCache {
+  private static SimpleCache sDownloadCache;
+
+  public static SimpleCache getInstance() {
+    if (sDownloadCache == null) sDownloadCache = new SimpleCache(new File("/storage/emulated/0/Movies/"), LeastRecentlyUsedCacheEvictor(100 * 1024 * 1024));
+    return sDownloadCache;
+  }
+}
 
 public class VideoPlayerPlugin implements MethodCallHandler {
 
@@ -100,10 +108,7 @@ public class VideoPlayerPlugin implements MethodCallHandler {
                 DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
                 true);
 
-
-        Cache cache = new SimpleCache(new File("/storage/emulated/0/Movies/"), new LeastRecentlyUsedCacheEvictor(100 * 1024 * 1024));
-
-        dataSourceFactory = new CacheDataSourceFactory(cache, upstreamFactory, CacheDataSource.FLAG_BLOCK_ON_CACHE, 100 * 1024 * 1024);
+        dataSourceFactory = new CacheDataSourceFactory(VideoCache.getInstance(), upstreamFactory, CacheDataSource.FLAG_BLOCK_ON_CACHE, 100 * 1024 * 1024);
         Log.e("VideoPlayerPlugin","use cache");
       }
 
