@@ -84,13 +84,18 @@ public class VideoPlayerPlugin implements MethodCallHandler {
       if (isFileOrAsset(uri)) {
         dataSourceFactory = new DefaultDataSourceFactory(context, "ExoPlayer");
       } else {
-        dataSourceFactory =
+        DataSource.Factory upstreamFactory =
             new DefaultHttpDataSourceFactory(
                 "ExoPlayer",
                 null,
                 DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
                 DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
                 true);
+
+        CacheEvictor cacheEvictor = new LeastRecentlyUsedCacheEvictor(100 * 1024 * 1024);
+        Cache cache = new SimpleCache(new File(getExternalCacheDir(), "media_cache"), cacheEvictor);
+
+        dataSourceFactory = new CacheDataSourceFactory(cache, upstreamFactory, CacheDataSource.FLAG_BLOCK_ON_CACHE, 100 * 1024 * 1024);
       }
 
       MediaSource mediaSource = buildMediaSource(uri, dataSourceFactory, context);
