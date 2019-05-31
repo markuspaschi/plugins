@@ -2,6 +2,7 @@ package io.flutter.plugins.videoplayer;
 
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
+import java.io.File;
 
 public class VideoCache {
     private static SimpleCache sDownloadCache;
