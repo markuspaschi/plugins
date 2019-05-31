@@ -100,7 +100,7 @@ public class VideoPlayerPlugin implements MethodCallHandler {
                 DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
                 true);
 
-        dataSourceFactory = new CacheDataSourceFactory(VideoCache.getInstance(), upstreamFactory, CacheDataSource.FLAG_BLOCK_ON_CACHE, 100 * 1024 * 1024);
+        dataSourceFactory = new CacheDataSourceFactory(VideoCache.getCacheSingleInstance(context, null), upstreamFactory, CacheDataSource.FLAG_BLOCK_ON_CACHE, 100 * 1024 * 1024);
       }
 
       MediaSource mediaSource = buildMediaSource(uri, dataSourceFactory, context);
