@@ -190,10 +190,10 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
   @visibleForTesting
   int get textureId => _textureId;
 
-  Future<void> preload() async {
-    debugPrint("shouldPreload");
+  Future<void> preload(int byteAmount) async {
     Map<dynamic, dynamic> dataSourceDescription = <String, dynamic>{
-      'uri': dataSource
+      'uri': dataSource,
+      'byteAmount': byteAmount,
     };
     final Map<dynamic, dynamic> response = await _channel.invokeMethod(
       'preload',
