@@ -351,9 +351,9 @@ public class VideoPlayerPlugin implements MethodCallHandler {
           CacheUtil.CachingCounters counters = new CacheUtil.CachingCounters();
 
           try {
-            Log.d("VideoPlayerPlugin", "6");
+              DataSource dataSource = upstreamFactory.createDataSource();
 
-            CacheUtil.cache(dataSpec, cache, upstreamFactory.createDataSource(), counters, null);
+              CacheUtil.cache(dataSpec, cache, dataSource, counters, null);
             Log.d("VideoPlayerPlugin", "Done caching");
           } catch (Exception e) {
             Log.d("VideoPlayerPlugin", "Exception");
