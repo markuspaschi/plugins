@@ -31,9 +31,11 @@ import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.CacheUtil;
 import com.google.android.exoplayer2.util.Util;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
@@ -331,6 +333,39 @@ public class VideoPlayerPlugin implements MethodCallHandler {
       case "init":
         disposeAllPlayers();
         break;
+      case "preload":
+
+        String uri = (String) call.argument("uri");
+        Thread thread = new Thread(new Runnable() {
+          @Override
+          public void run() {
+            DataSpec dataSpec = new DataSpec(Uri.parse(uri), 0, 1 * 1024 * 1024, null);
+
+            DataSource.Factory upstreamFactory =
+                    new DefaultHttpDataSourceFactory(
+                            "ExoPlayer",
+                            null,
+                            DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
+                            DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
+                            true);
+
+            SimpleCache simpleCache = VideoCache.getCacheSingleInstance(registrar.context(), null);
+            DataSource.Factory dataSourceFactory = new CacheDataSourceFactory(VideoCache.getCacheSingleInstance(registrar.context(), null),
+                    upstreamFactory, CacheDataSource.FLAG_BLOCK_ON_CACHE, 100 * 1024 * 1024);
+
+            CacheUtil.CachingCounters counters = new CacheUtil.CachingCounters();
+            try {
+              CacheUtil.cache(dataSpec, simpleCache, dataSourceFactory.createDataSource(), counters, null);
+              System.out.println("Done caching");
+            } catch (Exception e) {
+              System.out.println("Exception");
+              e.printStackTrace();
+            }
+          }
+        });
+        thread.start();
+        break;
+
       case "create":
         {
           TextureRegistry.SurfaceTextureEntry handle = textures.createSurfaceTexture();

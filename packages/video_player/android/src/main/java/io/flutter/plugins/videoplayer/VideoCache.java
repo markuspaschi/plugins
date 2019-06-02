@@ -22,10 +22,10 @@ class VideoCache {
             dirs = cacheDir.getAbsolutePath();
         }
         if (mCache == null) {
-            String path = dirs + File.separator + "challengefriends";
+            String path = dirs + File.separator + "exo";
             boolean isLocked = SimpleCache.isCacheFolderLocked(new File(path));
             if (!isLocked) {
-                Log.d("Cache_path:", path);
+//                Log.d("Cache_path:", path);
                 mCache = new SimpleCache(new File(path), new LeastRecentlyUsedCacheEvictor(DEFAULT_MAX_SIZE));
             }
         }
