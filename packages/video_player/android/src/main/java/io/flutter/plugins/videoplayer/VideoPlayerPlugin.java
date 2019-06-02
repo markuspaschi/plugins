@@ -338,31 +338,39 @@ public class VideoPlayerPlugin implements MethodCallHandler {
         Log.d("VideoPlayerPlugin", "preload");
 
         String uri = (String) call.argument("uri");
-        Thread thread = new Thread(new Runnable() {
-          @Override
-          public void run() {
-            DataSpec dataSpec = new DataSpec(Uri.parse(uri), 0, 1 * 1024 * 1024, null);
+        Log.d("VideoPlayerPlugin", "uri: " + uri);
 
-            DataSource.Factory upstreamFactory =
-                    new DefaultHttpDataSourceFactory(
-                            "ExoPlayer",
-                            null,
-                            DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
-                            DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
-                            true);
+        Thread thread = new Thread(() -> {
+          Log.d("VideoPlayerPlugin", "inThread");
 
-            Cache cache = VideoCache.getCacheSingleInstance(registrar.context(), null);
-            DataSource.Factory dataSourceFactory = new CacheDataSourceFactory(VideoCache.getCacheSingleInstance(registrar.context(), null),
-                    upstreamFactory, CacheDataSource.FLAG_BLOCK_ON_CACHE, 100 * 1024 * 1024);
+          DataSpec dataSpec = new DataSpec(Uri.parse(uri), 0, 1 * 1024 * 1024, null);
+          Log.d("VideoPlayerPlugin", "2");
 
-            CacheUtil.CachingCounters counters = new CacheUtil.CachingCounters();
-            try {
-              CacheUtil.cache(dataSpec, cache, dataSourceFactory.createDataSource(), counters, null);
-              Log.d("VideoPlayerPlugin", "Done caching");
-            } catch (Exception e) {
-              Log.d("VideoPlayerPlugin", "Exception");
-              e.printStackTrace();
-            }
+          DataSource.Factory upstreamFactory =
+                  new DefaultHttpDataSourceFactory(
+                          "ExoPlayer",
+                          null,
+                          DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
+                          DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
+                          true);
+          Log.d("VideoPlayerPlugin", "3");
+
+          Cache cache = VideoCache.getCacheSingleInstance(registrar.context(), null);
+          DataSource.Factory dataSourceFactory = new CacheDataSourceFactory(VideoCache.getCacheSingleInstance(registrar.context(), null),
+                  upstreamFactory, CacheDataSource.FLAG_BLOCK_ON_CACHE, 100 * 1024 * 1024);
+          Log.d("VideoPlayerPlugin", "4");
+
+          CacheUtil.CachingCounters counters = new CacheUtil.CachingCounters();
+          Log.d("VideoPlayerPlugin", "5");
+
+          try {
+            Log.d("VideoPlayerPlugin", "6");
+
+            CacheUtil.cache(dataSpec, cache, dataSourceFactory.createDataSource(), counters, null);
+            Log.d("VideoPlayerPlugin", "Done caching");
+          } catch (Exception e) {
+            Log.d("VideoPlayerPlugin", "Exception");
+            e.printStackTrace();
           }
         });
         thread.start();
