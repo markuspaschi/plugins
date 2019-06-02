@@ -30,5 +30,5 @@ class VideoCache {
             }
         }
         return mCache;
-    }// "/storage/emulated/0/Movies/challenge_friends/cache/"
+    }
 }

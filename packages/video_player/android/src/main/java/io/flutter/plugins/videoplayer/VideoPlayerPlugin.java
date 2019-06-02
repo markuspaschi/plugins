@@ -354,11 +354,11 @@ public class VideoPlayerPlugin implements MethodCallHandler {
               DataSource dataSource = upstreamFactory.createDataSource();
 
               CacheUtil.cache(dataSpec, cache, dataSource, counters, null);
-              dataSource.close();
             Log.d("VideoPlayerPlugin", "Done caching");
           } catch (Exception e) {
-            Log.d("VideoPlayerPlugin", "Exception");
-            e.printStackTrace();
+            // happens if it already exists
+            Log.d("VideoPlayerPlugin", "Exception - file exists already");
+//            e.printStackTrace();
           }
         });
         thread.start();
