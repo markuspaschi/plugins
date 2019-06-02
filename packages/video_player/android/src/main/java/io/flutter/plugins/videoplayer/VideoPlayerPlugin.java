@@ -349,13 +349,13 @@ public class VideoPlayerPlugin implements MethodCallHandler {
                             DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
                             true);
 
-            SimpleCache simpleCache = VideoCache.getCacheSingleInstance(registrar.context(), null);
+            Cache cache = VideoCache.getCacheSingleInstance(registrar.context(), null);
             DataSource.Factory dataSourceFactory = new CacheDataSourceFactory(VideoCache.getCacheSingleInstance(registrar.context(), null),
                     upstreamFactory, CacheDataSource.FLAG_BLOCK_ON_CACHE, 100 * 1024 * 1024);
 
             CacheUtil.CachingCounters counters = new CacheUtil.CachingCounters();
             try {
-              CacheUtil.cache(dataSpec, simpleCache, dataSourceFactory.createDataSource(), counters, null);
+              CacheUtil.cache(dataSpec, cache, dataSourceFactory.createDataSource(), counters, null);
               System.out.println("Done caching");
             } catch (Exception e) {
               System.out.println("Exception");
