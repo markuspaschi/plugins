@@ -335,6 +335,8 @@ public class VideoPlayerPlugin implements MethodCallHandler {
         break;
       case "preload":
 
+        Log.d("VideoPlayerPlugin", "preload");
+
         String uri = (String) call.argument("uri");
         Thread thread = new Thread(new Runnable() {
           @Override
@@ -356,9 +358,9 @@ public class VideoPlayerPlugin implements MethodCallHandler {
             CacheUtil.CachingCounters counters = new CacheUtil.CachingCounters();
             try {
               CacheUtil.cache(dataSpec, cache, dataSourceFactory.createDataSource(), counters, null);
-              System.out.println("Done caching");
+              Log.d("VideoPlayerPlugin", "Done caching");
             } catch (Exception e) {
-              System.out.println("Exception");
+              Log.d("VideoPlayerPlugin", "Exception");
               e.printStackTrace();
             }
           }
