@@ -131,7 +131,7 @@ class VideoPlayerValue {
   }
 }
 
-enum DataSourceType { asset, network, file }
+enum DataSourceType { asset, network, file, preload }
 
 /// Controls a platform video player, and provides updates when the state is
 /// changing.
@@ -189,6 +189,17 @@ class VideoPlayerController extends ValueNotifier<VideoPlayerValue> {
 
   @visibleForTesting
   int get textureId => _textureId;
+
+  Future<void> preload() async {
+    debugPrint("shouldPreload");
+    Map<dynamic, dynamic> dataSourceDescription = <String, dynamic>{
+      'uri': dataSource
+    };
+    final Map<dynamic, dynamic> response = await _channel.invokeMethod(
+      'preload',
+      dataSourceDescription,
+    );
+  }
 
   Future<void> initialize() async {
     _lifeCycleObserver = _VideoAppLifeCycleObserver(this);
