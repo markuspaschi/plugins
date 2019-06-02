@@ -344,7 +344,7 @@ public class VideoPlayerPlugin implements MethodCallHandler {
       case "preload":
 
         String uri = (String) call.argument("uri");
-        int byteAmount = (String) call.argument("byteAmount");
+        int byteAmount = (int) call.argument("byteAmount");
         Thread thread = new Thread(() -> {
           DataSpec dataSpec = new DataSpec(Uri.parse(uri), 0, byteAmount, null);
 
