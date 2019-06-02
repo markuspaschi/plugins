@@ -344,8 +344,9 @@ public class VideoPlayerPlugin implements MethodCallHandler {
       case "preload":
 
         String uri = (String) call.argument("uri");
+        int byteAmount = (String) call.argument("byteAmount");
         Thread thread = new Thread(() -> {
-          DataSpec dataSpec = new DataSpec(Uri.parse(uri), 0, 1 * 1024 * 1024, null);
+          DataSpec dataSpec = new DataSpec(Uri.parse(uri), 0, byteAmount, null);
 
           Cache cache = VideoCache.getCacheSingleInstance(registrar.context(), null);
           CacheUtil.CachingCounters counters = new CacheUtil.CachingCounters();
