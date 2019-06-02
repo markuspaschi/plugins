@@ -322,6 +322,14 @@ public class VideoPlayerPlugin implements MethodCallHandler {
     disposeAllPlayers();
   }
 
+  private DataSource.Factory upstreamFactory =
+          new DefaultHttpDataSourceFactory(
+                  "ExoPlayer",
+                  null,
+                  DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
+                  DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
+                  true);
+
   @Override
   public void onMethodCall(MethodCall call, Result result) {
     TextureRegistry textures = registrar.textures();
@@ -335,33 +343,12 @@ public class VideoPlayerPlugin implements MethodCallHandler {
         break;
       case "preload":
 
-        Log.d("VideoPlayerPlugin", "preload");
-
         String uri = (String) call.argument("uri");
-        Log.d("VideoPlayerPlugin", "uri: " + uri);
-
         Thread thread = new Thread(() -> {
-          Log.d("VideoPlayerPlugin", "inThread");
-
           DataSpec dataSpec = new DataSpec(Uri.parse(uri), 0, 1 * 1024 * 1024, null);
-          Log.d("VideoPlayerPlugin", "2");
-
-          DataSource.Factory upstreamFactory =
-                  new DefaultHttpDataSourceFactory(
-                          "ExoPlayer",
-                          null,
-                          DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
-                          DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
-                          true);
-          Log.d("VideoPlayerPlugin", "3");
 
           Cache cache = VideoCache.getCacheSingleInstance(registrar.context(), null);
-          DataSource.Factory dataSourceFactory = new CacheDataSourceFactory(VideoCache.getCacheSingleInstance(registrar.context(), null),
-                  upstreamFactory, CacheDataSource.FLAG_BLOCK_ON_CACHE, 100 * 1024 * 1024);
-          Log.d("VideoPlayerPlugin", "4");
-
           CacheUtil.CachingCounters counters = new CacheUtil.CachingCounters();
-          Log.d("VideoPlayerPlugin", "5");
 
           try {
             Log.d("VideoPlayerPlugin", "6");
